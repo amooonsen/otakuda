@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/theme-provider/ThemeProvider";
+import { ThemeProvider } from "@/components/context/ThemeProvider";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import RQProvider from "@/components/context/RQProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,9 +28,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          {children}
+          <RQProvider>
+            {children}
+          </RQProvider>
           <Footer />
-        </ThemeProvider></body>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

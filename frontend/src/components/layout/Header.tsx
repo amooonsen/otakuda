@@ -1,5 +1,5 @@
 import Image from "next/image"; // 올바른 import 경로
-import ModeToggle from "@/components/theme-provider/ModeToggle";
+import ModeToggleButton from "@/components/ui/ModeToggleButton";
 import Link from "next/link";
 
 export default function Header() {
@@ -34,9 +34,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <button>찾기</button>
           <Link href='/login'>로그인/가입</Link>
-
-          <ModeToggle />
-
+          <ModeToggleButton />
         </div>
       </div>
     </header>
