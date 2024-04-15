@@ -17,7 +17,6 @@ import Footer from "@/components/layout/Footer";
 export default function Home() {
   return (
     <>
-      <Header />
       <Dialog>
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
@@ -30,7 +29,6 @@ export default function Home() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-      <Footer />
     </>
   );
 }

@@ -25,7 +25,10 @@ export default function Header() {
             </li>
             <li>
               <Link href='/manga'>Manga</Link>
-            </li>
+            </li> 
+            <li>
+              <Link href='/news'>News</Link>
+            </li> 
           </ul>
         </nav>
         <div className="flex items-center gap-4">
