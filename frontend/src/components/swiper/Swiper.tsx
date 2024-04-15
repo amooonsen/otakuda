@@ -23,13 +23,15 @@ interface SwiperDefaultProps {
 }
 
 export default function SwiperDefault({ options, children }: SwiperDefaultProps) {
+  const swiperOptions = {
+    spaceBetween: options?.spaceBetween || 50,
+    slidesPerView: options?.slidesPerView || 3,
+    modules: options?.pagination ? [Pagination] : [],
+    pagination: options?.pagination ? { clickable: true } : undefined
+  };
+  
   return (
-    <Swiper
-      spaceBetween={options?.spaceBetween || 50}
-      slidesPerView={options?.slidesPerView || 3}
-      modules={[Pagination]}
-      pagination={{ clickable: true }}
-    >
+    <Swiper {...swiperOptions} >
       {React.Children.map(children, (child, index) => (
         <SwiperSlide key={index}>{child}</SwiperSlide>
       ))}
