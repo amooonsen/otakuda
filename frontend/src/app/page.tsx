@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
@@ -9,11 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   return (
     <>
-      <Button>버튼임</Button>
+      <Header />
       <Dialog>
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
@@ -26,7 +30,7 @@ export default function Home() {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
+      <Footer />
     </>
   );
 }
