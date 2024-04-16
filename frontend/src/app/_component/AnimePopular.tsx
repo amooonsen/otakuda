@@ -1,9 +1,12 @@
 "use client"
 
 import React from 'react'
-// component
-import SwiperDefault from '@/components/swiper/Swiper';
+import { Suspense } from 'react';
 
+// component
+const SwiperDefault = React.lazy(() => import('@/components/swiper/Swiper'));
+
+// import SwiperDefault from '@/components/swiper/Swiper';
 // service
 import { getAnimePopular } from '@/service/getAnimePopular'
 
@@ -11,7 +14,6 @@ import { getAnimePopular } from '@/service/getAnimePopular'
 import { useQuery } from '@tanstack/react-query'
 
 // types
-
 import { Anime, AnimeInfo } from '@/types/animeTypes';
 
 type AnimePopularProps = {
@@ -19,21 +21,19 @@ type AnimePopularProps = {
 }
 
 export default function AnimePopular({ isSlide }: AnimePopularProps) {
-  const { data: apiResponse, isLoading, error } = useQuery({
+  const { data: apiResponse, isPending, error } = useQuery({
     queryKey: ['anime', 'popular'],
     queryFn: getAnimePopular
   });
 
   const popularAnimeList = apiResponse?.data ?? [];
 
-  console.log(popularAnimeList)
+  if (isPending) return <div>데이터 로딩중...</div>;
+  if (error) return <div>An error occurred: {error.message}</div>;
 
-  if (isLoading) return <div>Loading...</div>; // 로딩 인디케이터
-  if (error) return <div>An error occurred: {error.message}</div>; // 에러 메시지
-
-  const renderSwiper = () => (
-    <SwiperDefault options={{ spaceBetween: 30, slidesPerView: 3 }}>
-      {popularAnimeList.map((anime:Anime, index:number) => (
+  const swiperContent = (
+    <SwiperDefault options={{ spaceBetween: 30, slidesPerView: 3, pagination: true }}>
+      {popularAnimeList.map((anime: Anime, index: number) => (
         <div key={index}>
           <h2>{anime.attributes.canonicalTitle}</h2>
           <h3>{anime.attributes.abbreviatedTitles.join(", ")}</h3>
@@ -43,21 +43,83 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
       ))}
     </SwiperDefault>
   );
-  
 
-  // 리스트 렌더링을 위한 더 상세한 정보 표시
-  const renderList = () => (
-    <ul>
-      {popularAnimeList.map((anime: Anime, index: number) => (
-        <li key={`popular-anime-${index}`}>
-          <h3>{anime.attributes.canonicalTitle}</h3>
-          <p>Abbreviated Titles: {anime.attributes.abbreviatedTitles.join(", ")}</p>
-          <p>Rating: {anime.attributes.ageRating} - {anime.attributes.ageRatingGuide}</p>
-          <p>Average Rating: {anime.attributes.averageRating}</p>
-        </li>
-      ))}
-    </ul>
-  );
-  return isSlide ? renderSwiper() : renderList();
 
+  if (isSlide) {
+    return (
+      <Suspense fallback={<div>스와이퍼 로딩 중</div>}>
+        {swiperContent}
+      </Suspense>
+    );
+  }else {
+    return (
+      <ul>
+        {popularAnimeList.map((anime: Anime, index: number) => (
+          <li key={`popular-anime-${index}`}>
+            <h3>{anime.attributes.canonicalTitle}</h3>
+            <p>Abbreviated Titles: {anime.attributes.abbreviatedTitles.join(", ")}</p>
+            <p>Rating: {anime.attributes.ageRating} - {anime.attributes.ageRatingGuide}</p>
+            <p>Average Rating: {anime.attributes.averageRating}</p>
+          </li>
+        ))}
+      </ul>
+    );
+  }
 }
+
+
+
+// 만약 list에서 무한스크롤을 구현하려면 ? 
+
+// 서비스 수정: 페이지별로 데이터를 가져오는 함수
+// async function getAnimePopular({ pageParam = 1 }) {
+//   const response = await fetch(`https://kitsu.io/api/edge/anime?page=${pageParam}`);
+//   if (!response.ok) {
+//     throw new Error('Network response was not ok');
+//   }
+//   return response.json();
+// }
+
+// import { useInfiniteQuery } from '@tanstack/react-query';
+
+// const renderList = () => {
+//   const {
+//     data,
+//     fetchNextPage,
+//     hasNextPage,
+//     isFetchingNextPage,
+//     status,
+//     error
+//   } = useInfiniteQuery(['anime', 'infinite'], getAnimePopular, {
+//     getNextPageParam: (lastPage, pages) => lastPage.nextPage
+//   });
+
+//   if (status === 'loading') return <div>Loading...</div>;
+//   if (status === 'error') return <div>Error: {error.message}</div>;
+
+//   return (
+//     <div>
+//       <ul>
+//         {data.pages.map((group, i) => (
+//           <React.Fragment key={i}>
+//             {group.data.map((anime) => (
+//               <li key={anime.id}>
+//                 {anime.attributes.canonicalTitle}
+//               </li>
+//             ))}
+//           </React.Fragment>
+//         ))}
+//       </ul>
+//       <button
+//         onClick={() => fetchNextPage()}
+//         disabled={!hasNextPage || isFetchingNextPage}
+//       >
+//         {isFetchingNextPage
+//           ? 'Loading more...'
+//           : hasNextPage
+//           ? 'Load More'
+//           : 'Nothing more to load'}
+//       </button>
+//     </div>
+//   );
+// };

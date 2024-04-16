@@ -11,20 +11,15 @@ import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query
 import { getAnimePopular } from "@/service/getAnimePopular";
 
 // ui-component
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import SwiperDefault from "@/components/swiper/Swiper";
-import { ReactElement } from "react";
 import AnimePopular from "./_component/AnimePopular";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+
+// types
+import { ReactElement } from "react";
 
 export default async function Home(): Promise<ReactElement> {
 
@@ -51,12 +46,16 @@ export default async function Home(): Promise<ReactElement> {
           </div>
         </section>
         <section>
-          {/* <SwiperDefault /> */}
-          <AnimePopular isSlide/>
+          {/* <AnimePopular isSlide />
+          <AnimePopular /> */}
         </section>
-        {/* <section 
-      className="grid grid-cols-8">
-      </section> */}
+        <Collapsible>
+          <CollapsibleTrigger>Can I use this in my project?</CollapsibleTrigger>
+          <CollapsibleContent>
+            Yes. Free to use for personal and commercial projects. No attribution
+            required.
+          </CollapsibleContent>
+        </Collapsible>
       </HydrationBoundary>
     </main>
   );

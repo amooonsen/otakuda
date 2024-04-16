@@ -23,6 +23,7 @@ interface SwiperDefaultProps {
 }
 
 export default function SwiperDefault({ options, children }: SwiperDefaultProps) {
+  // 옵션 제어 객체로 변경
   const swiperOptions = {
     spaceBetween: options?.spaceBetween || 50,
     slidesPerView: options?.slidesPerView || 3,
@@ -30,6 +31,7 @@ export default function SwiperDefault({ options, children }: SwiperDefaultProps)
     pagination: options?.pagination ? { clickable: true } : undefined
   };
   
+  // 일괄 적용
   return (
     <Swiper {...swiperOptions} >
       {React.Children.map(children, (child, index) => (
