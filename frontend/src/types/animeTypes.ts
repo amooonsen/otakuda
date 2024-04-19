@@ -5,6 +5,12 @@ export interface AnimeAttributes {
   ageRatingGuide: string;
   averageRating: string;
   canonicalTitle: string;
+  posterImage: {
+    small: string;
+    large: string;
+    original: string;
+    tiny: string;
+  }
 }
 
 export interface Anime {

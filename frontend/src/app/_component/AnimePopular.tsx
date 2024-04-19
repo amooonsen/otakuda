@@ -1,14 +1,15 @@
 "use client"
 
-import React from 'react'
-import { Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react'
+import Image from 'next/image';
 
 // component
-const SwiperDefault = React.lazy(() => import('@/components/swiper/Swiper'));
+// const SwiperDefault = React.lazy(() => import('@/components/swiper/Swiper'));
+import SwiperDefault from '@/components/swiper/Swiper';
+import LoadingSlide from '@/components/loading/LoadingSlide';
 
-// import SwiperDefault from '@/components/swiper/Swiper';
 // service
-import { getAnimePopular } from '@/service/getAnimePopular'
+import { getAnimeData } from '@/service/getAnimeData'
 
 // tanstack-query
 import { useQuery } from '@tanstack/react-query'
@@ -16,29 +17,59 @@ import { useQuery } from '@tanstack/react-query'
 // types
 import { Anime, AnimeInfo } from '@/types/animeTypes';
 
+// utils
+import { sortData } from '@/utils/utils';
+
+
 type AnimePopularProps = {
   isSlide?: boolean
 }
 
+const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23cccccc'%3E%3Crect width='100' height='100'/%3E%3C/svg%3E";
+
 export default function AnimePopular({ isSlide }: AnimePopularProps) {
+  const [sortedAnimeList, setSortedAnimeList] = useState<Anime[]>([]);
   const { data: apiResponse, isPending, error } = useQuery({
     queryKey: ['anime', 'popular'],
-    queryFn: getAnimePopular
+    queryFn: getAnimeData
   });
 
   const popularAnimeList = apiResponse?.data ?? [];
 
-  if (isPending) return <div>데이터 로딩중...</div>;
+  useEffect(() => {
+    if (apiResponse?.data) {
+      const sortedData = sortData(apiResponse.data, 'favoritesCount'); // 정렬 함수 사용
+      setSortedAnimeList(sortedData);
+    }
+  }, [apiResponse]);
+
+
+  console.log(popularAnimeList)
+
+  if (isPending) return <LoadingSlide/>
   if (error) return <div>An error occurred: {error.message}</div>;
 
   const swiperContent = (
     <SwiperDefault options={{ spaceBetween: 30, slidesPerView: 3, pagination: true }}>
-      {popularAnimeList.map((anime: Anime, index: number) => (
+      {sortedAnimeList.map((anime: Anime, index: number) => (
         <div key={index}>
-          <h2>{anime.attributes.canonicalTitle}</h2>
-          <h3>{anime.attributes.abbreviatedTitles.join(", ")}</h3>
+          {anime.attributes.posterImage?.small && (
+            <Image
+            
+              src={anime.attributes.posterImage.small}
+              alt={`${anime.attributes.canonicalTitle} Cover`}
+              width={100}
+              height={150}
+              layout="responsive"
+              blurDataURL={placeholder}
+              placeholder="blur"
+            />
+          )}
+          <h3>{anime.attributes.canonicalTitle}</h3>
+          <h4>{anime.attributes.abbreviatedTitles.join(", ")}</h4>
           <p>{`${anime.attributes.ageRating} - ${anime.attributes.ageRatingGuide}`}</p>
           <p>{`Average Rating: ${anime.attributes.averageRating}`}</p>
+          <p>{anime.attributes.favoritesCount}</p>
         </div>
       ))}
     </SwiperDefault>
@@ -47,11 +78,14 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
 
   if (isSlide) {
     return (
-      <Suspense fallback={<div>스와이퍼 로딩 중</div>}>
+      <div>
         {swiperContent}
-      </Suspense>
+      </div>
+      // <Suspense fallback={<LoadingSlide/>}>
+      //   {swiperContent}
+      // </Suspense>
     );
-  }else {
+  } else {
     return (
       <ul>
         {popularAnimeList.map((anime: Anime, index: number) => (
@@ -72,7 +106,7 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
 // 만약 list에서 무한스크롤을 구현하려면 ? 
 
 // 서비스 수정: 페이지별로 데이터를 가져오는 함수
-// async function getAnimePopular({ pageParam = 1 }) {
+// async function getAnimeData({ pageParam = 1 }) {
 //   const response = await fetch(`https://kitsu.io/api/edge/anime?page=${pageParam}`);
 //   if (!response.ok) {
 //     throw new Error('Network response was not ok');
@@ -90,7 +124,7 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
 //     isFetchingNextPage,
 //     status,
 //     error
-//   } = useInfiniteQuery(['anime', 'infinite'], getAnimePopular, {
+//   } = useInfiniteQuery(['anime', 'infinite'], getAnimeData, {
 //     getNextPageParam: (lastPage, pages) => lastPage.nextPage
 //   });
 
@@ -123,3 +157,5 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
 //     </div>
 //   );
 // };
+
+

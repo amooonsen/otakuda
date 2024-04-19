@@ -8,10 +8,11 @@ import MainVisual from '../../public/images/point_image01.webp'
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 
 // service
-import { getAnimePopular } from "@/service/getAnimePopular";
+import { getAnimeData } from "@/service/getAnimeData";
 
 // ui-component
 import AnimePopular from "./_component/AnimePopular";
+import AnimeChapters from "./_component/AnimeChapters";
 import {
   Collapsible,
   CollapsibleContent,
@@ -26,7 +27,7 @@ export default async function Home(): Promise<ReactElement> {
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({
     queryKey: ['anime', 'popular'],
-    queryFn: getAnimePopular
+    queryFn: getAnimeData
   })
 
   const dehydratedState = dehydrate(queryClient)
@@ -35,20 +36,33 @@ export default async function Home(): Promise<ReactElement> {
     <main id="main">
       <HydrationBoundary state={dehydratedState}>
         <section>
-          <div className="w-full">
-            {/* <Image
-        src={MainVisual}
-        alt="메인 비쥬얼"
-        layout="responsive"
-        height={600}
-        placeholder="blur"
-        /> */}
+          {/* h-96: 기본 높이로 24rem (대략 384px)을 설정합니다.
+            sm:h-[500px]: 640px 이상의 화면에서는 높이를 500px로 설정합니다.
+            md:h-[700px]: 768px 이상의 화면에서는 높이를 700px로 설정합니다.
+            lg:h-[900px]: 1024px 이상의 화면에서는 높이를 900px로 설정합니다.
+            xl:h-[1100px]: 1280px 이상의 화면에서는 높이를 1100px로 설정합니다.
+            2xl:h-[1500px]: 1536px 이상의 화면에서는 높이를 1500px로 설정합니다. */}
+          <div className="relative w-full h-96 sm:h-[500px] md:h-[700px] lg:h-[900px] xl:h-[1100px] 2xl:h-[1500px]">
+            <Image
+              src={MainVisual}
+              alt="메인 비쥬얼"
+              fill
+              priority
+              placeholder="blur"
+              className="object-cover"
+            />
           </div>
         </section>
         <section>
-          {/* <AnimePopular isSlide />
-          <AnimePopular /> */}
-        </section>
+          <h2 className="text-[64px]">Top Airing Anime</h2>
+          <AnimePopular isSlide />
+          {/* <AnimePopular /> */}
+        </section> 
+        <section>
+          <h2 className="text-[64px]">Trending This Week</h2>
+          {/* <AnimeChapters /> */}
+          {/* <AnimePopular /> */}
+        </section> 
         <Collapsible>
           <CollapsibleTrigger>Can I use this in my project?</CollapsibleTrigger>
           <CollapsibleContent>
