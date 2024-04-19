@@ -23,7 +23,6 @@ import {
 import { ReactElement } from "react";
 
 export default async function Home(): Promise<ReactElement> {
-
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({
     queryKey: ['anime', 'popular'],
@@ -42,7 +41,7 @@ export default async function Home(): Promise<ReactElement> {
             lg:h-[900px]: 1024px 이상의 화면에서는 높이를 900px로 설정합니다.
             xl:h-[1100px]: 1280px 이상의 화면에서는 높이를 1100px로 설정합니다.
             2xl:h-[1500px]: 1536px 이상의 화면에서는 높이를 1500px로 설정합니다. */}
-          <div className="relative w-full h-96 sm:h-[500px] md:h-[700px] lg:h-[900px] xl:h-[1100px] 2xl:h-[1500px]">
+          <div className="relative w-full h-screen md:h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]">
             <Image
               src={MainVisual}
               alt="메인 비쥬얼"
@@ -53,15 +52,22 @@ export default async function Home(): Promise<ReactElement> {
             />
           </div>
         </section>
-        <section>
-          <h2 className="text-[64px]">Top Airing Anime</h2>
+        <section className="mt-10">
+          <h2 className="text-[64px] pl-10">Top Airing Anime</h2>
           <AnimePopular isSlide />
           {/* <AnimePopular /> */}
         </section> 
         <section>
-          <h2 className="text-[64px]">Trending This Week</h2>
+          <h2 className="text-[64px] pl-10">Trending This Week</h2>
           {/* <AnimeChapters /> */}
-          {/* <AnimePopular /> */}
+        </section> 
+        <section>
+          <h2 className="text-[64px] pl-10">Trending This Week</h2>
+          {/* <SomeCompoennt /> */}
+        </section> 
+        <section>
+          <h2 className="text-[64px] pl-10">Trending This Week</h2>
+          {/* <SomeCompoennt /> */}
         </section> 
         <Collapsible>
           <CollapsibleTrigger>Can I use this in my project?</CollapsibleTrigger>

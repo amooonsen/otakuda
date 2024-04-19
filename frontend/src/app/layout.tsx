@@ -6,7 +6,10 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import RQProvider from "@/components/context/RQProvider";
 
+import NextTopLoader from 'nextjs-toploader';
+
 const inter = Inter({ subsets: ["latin"] });
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,12 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <NextTopLoader/>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+          >
           <Header />
           <RQProvider>
             {children}

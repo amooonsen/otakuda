@@ -50,19 +50,19 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
   if (error) return <div>An error occurred: {error.message}</div>;
 
   const swiperContent = (
-    <SwiperDefault options={{ spaceBetween: 30, slidesPerView: 3, pagination: true }}>
+    <SwiperDefault options={{ spaceBetween: 10, slidesPerView: 7.5}}>
       {sortedAnimeList.map((anime: Anime, index: number) => (
         <div key={index}>
-          {anime.attributes.posterImage?.small && (
+          {anime.attributes.posterImage && (
             <Image
-            
-              src={anime.attributes.posterImage.small}
+              src={anime.attributes.posterImage.large}
               alt={`${anime.attributes.canonicalTitle} Cover`}
-              width={100}
-              height={150}
               layout="responsive"
+              width={200}
+              height={150}
               blurDataURL={placeholder}
               placeholder="blur"
+              className='max-h-[200px] object-cover'
             />
           )}
           <h3>{anime.attributes.canonicalTitle}</h3>
@@ -78,7 +78,7 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
 
   if (isSlide) {
     return (
-      <div>
+      <div className='pl-10'>
         {swiperContent}
       </div>
       // <Suspense fallback={<LoadingSlide/>}>
