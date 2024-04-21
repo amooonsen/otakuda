@@ -19,6 +19,7 @@ import { Anime, AnimeInfo } from '@/types/animeTypes';
 
 // utils
 import { sortData } from '@/utils/utils';
+import Link from 'next/link';
 
 
 type AnimePopularProps = {
@@ -52,7 +53,7 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
   const swiperContent = (
     <SwiperDefault options={{ spaceBetween: 10, slidesPerView: 7.5}}>
       {sortedAnimeList.map((anime: Anime, index: number) => (
-        <div key={index}>
+        <Link href='/animation' key={index}>
           {anime.attributes.posterImage && (
             <Image
               src={anime.attributes.posterImage.large}
@@ -65,12 +66,12 @@ export default function AnimePopular({ isSlide }: AnimePopularProps) {
               className='max-h-[200px] object-cover'
             />
           )}
-          <h3>{anime.attributes.canonicalTitle}</h3>
-          <h4>{anime.attributes.abbreviatedTitles.join(", ")}</h4>
+          <h3 className='mt-2 font-bold'>{anime.attributes.canonicalTitle}</h3>
+          {/* <h4>{anime.attributes.abbreviatedTitles.join(", ")}</h4>
           <p>{`${anime.attributes.ageRating} - ${anime.attributes.ageRatingGuide}`}</p>
           <p>{`Average Rating: ${anime.attributes.averageRating}`}</p>
-          <p>{anime.attributes.favoritesCount}</p>
-        </div>
+          <p>{anime.attributes.favoritesCount}</p> */}
+        </Link>
       ))}
     </SwiperDefault>
   );

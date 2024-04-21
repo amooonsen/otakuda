@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import RQProvider from "@/components/context/RQProvider";
+import SmoothScrollProvider from "@/components/context/SmoothScrollProvider";
 
 import NextTopLoader from 'nextjs-toploader';
 
@@ -24,13 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextTopLoader/>
+        <NextTopLoader />
+        <SmoothScrollProvider />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-          >
+        >
           <Header />
           <RQProvider>
             {children}

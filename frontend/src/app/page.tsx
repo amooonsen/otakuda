@@ -32,15 +32,9 @@ export default async function Home(): Promise<ReactElement> {
   const dehydratedState = dehydrate(queryClient)
 
   return (
-    <main id="main">
+    <main id="main" className="mb-20">
       <HydrationBoundary state={dehydratedState}>
         <section>
-          {/* h-96: 기본 높이로 24rem (대략 384px)을 설정합니다.
-            sm:h-[500px]: 640px 이상의 화면에서는 높이를 500px로 설정합니다.
-            md:h-[700px]: 768px 이상의 화면에서는 높이를 700px로 설정합니다.
-            lg:h-[900px]: 1024px 이상의 화면에서는 높이를 900px로 설정합니다.
-            xl:h-[1100px]: 1280px 이상의 화면에서는 높이를 1100px로 설정합니다.
-            2xl:h-[1500px]: 1536px 이상의 화면에서는 높이를 1500px로 설정합니다. */}
           <div className="relative w-full h-screen md:h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px]">
             <Image
               src={MainVisual}
@@ -53,29 +47,22 @@ export default async function Home(): Promise<ReactElement> {
           </div>
         </section>
         <section className="mt-10">
-          <h2 className="text-[64px] pl-10">Top Airing Anime</h2>
+          <h2 className="text-[64px] pl-10">Top Airing Anime.</h2>
           <AnimePopular isSlide />
           {/* <AnimePopular /> */}
         </section> 
-        <section>
-          <h2 className="text-[64px] pl-10">Trending This Week</h2>
-          {/* <AnimeChapters /> */}
+        <section className="mt-10">
+          <h2 className="text-[64px] pl-10">Trending This Week.</h2>
+          <AnimePopular isSlide />
         </section> 
-        <section>
-          <h2 className="text-[64px] pl-10">Trending This Week</h2>
-          {/* <SomeCompoennt /> */}
+        <section className="mt-10">
+          <h2 className="text-[64px] pl-10">Highest Rated Anime.</h2>
+          <AnimePopular isSlide />
         </section> 
-        <section>
-          <h2 className="text-[64px] pl-10">Trending This Week</h2>
-          {/* <SomeCompoennt /> */}
+        <section className="mt-10">
+          <h2 className="text-[64px] pl-10">Most Popular Anime.</h2>
+          <AnimePopular isSlide/>
         </section> 
-        <Collapsible>
-          <CollapsibleTrigger>Can I use this in my project?</CollapsibleTrigger>
-          <CollapsibleContent>
-            Yes. Free to use for personal and commercial projects. No attribution
-            required.
-          </CollapsibleContent>
-        </Collapsible>
       </HydrationBoundary>
     </main>
   );
